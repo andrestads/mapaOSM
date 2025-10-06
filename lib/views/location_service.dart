@@ -23,27 +23,27 @@ class LocationService {
       return null;
     }
 
-    // Obtém o nível da bateria
+
     final battery = Battery();
     final batteryLevel = await battery.batteryLevel;
 
-    // Ajusta a precisão com base no nível da bateria
+  
     LocationAccuracy accuracy;
     switch (batteryLevel) {
       case > 50:
-        accuracy = LocationAccuracy.best; // Alta precisão para bateria acima de 50%
+        accuracy = LocationAccuracy.best;
         break;
       case > 30:
-        accuracy = LocationAccuracy.high; // Alta precisão para bateria entre 30% e 50%
+        accuracy = LocationAccuracy.high;
         break;
       case > 20:
-        accuracy = LocationAccuracy.medium; // Precisão média para bateria entre 20% e 30%
+        accuracy = LocationAccuracy.medium;
         break;
       default:
-        accuracy = LocationAccuracy.low; // Baixa precisão para economizar bateria
+        accuracy = LocationAccuracy.low;
     }
 
-    // Retorna a posição atual com as configurações ajustadas
+
     return await Geolocator.getCurrentPosition(
       locationSettings: LocationSettings(
         accuracy: accuracy,

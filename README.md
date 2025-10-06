@@ -1,119 +1,82 @@
-#  Velocímetro GPS
+Mapa com Localização em Tempo Real (OpenStreetMap)
+Um aplicativo Flutter que exibe a localização atual do usuário em um mapa interativo do OpenStreetMap, com atualização em tempo real e busca de endereços.
 
-Um aplicativo Flutter moderno e intuitivo para monitoramento de velocidade em tempo real utilizando GPS.
-
-##  Captura de Tela
+📸 Captura de Tela
+(Sugestão: Tire uma nova captura de tela do aplicativo com a barra de busca e o mapa para colocar aqui)
 
 <div align="center">
-  <img src="assets/images/screenshot.png" alt="Velocímetro GPS Screenshot" width="300"/>
+<img src="assets/images/screenshot.png" alt="Captura de tela do aplicativo de mapa" width="300"/>
 </div>
 
-##  Funcionalidades
+✨ Funcionalidades
+Mapa Interativo: Visualização da localização em um mapa dinâmico baseado no OpenStreetMap.
 
--  **Velocímetro em tempo real** - Medição precisa da velocidade atual
--  **Distância percorrida** - Cálculo acumulativo da distância total
--  **Velocidade média** - Análise da velocidade média durante o trajeto
--  **Cronômetro** - Tempo de deslocamento em formato h:m:s
--  **Modo HUD** - Head-Up Display para uso no para-brisa
--  **Reset de dados** - Reinicialização rápida das medições
--  **Interface adaptativa** - Design otimizado para diferentes condições de luz
--  **Tela sempre ativa** - Previne que a tela desligue durante o uso
+Localização em Tempo Real: O marcador do usuário se move no mapa conforme o dispositivo é deslocado.
 
-##  Tecnologias Utilizadas
+Barra de Busca de Endereços: Permite que o usuário pesquise por um endereço e visualize sua localização no mapa.
 
-- **Flutter** - Framework de desenvolvimento
-- **Geolocator** - Serviços de GPS e localização
-- **Wakelock Plus** - Controle do estado da tela
-- **Intl** - Formatação de números em português brasileiro
+Otimização de Bateria: A precisão do GPS é ajustada automaticamente com base no nível de bateria do dispositivo para um consumo mais eficiente de energia.
 
-##  Pré-requisitos
+Ícone Personalizado: Substituição do ícone padrão do Flutter por um design exclusivo.
 
-- Flutter SDK 3.7.0 ou superior
-- Android SDK (para build Android)
-- Dispositivo com GPS habilitado
-- Permissões de localização concedidas
+🛠️ Tecnologias Utilizadas
+Flutter: Framework para desenvolvimento de aplicativos multiplataforma.
 
-##  Como executar
+flutter_map: Biblioteca para a integração de mapas no Flutter.
 
-1. **Clone o repositório:**
-```bash
-git clone https://github.com/WilliamUcha/velocimetro.git
-cd velocimetro
-```
+geolocator: Para obter a localização do dispositivo via GPS.
 
-2. **Instale as dependências:**
-```bash
+geocoding: Para converter endereços em coordenadas geográficas (geocodificação).
+
+provider: Para gerenciamento de estado.
+
+battery_plus: Para monitorar o nível da bateria.
+
+🚀 Como executar
+
+Clone o repositório:
+
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+
+Instale as dependências:
 flutter pub get
-```
 
-3. **Execute o aplicativo:**
-```bash
+Execute o aplicativo:
 flutter run
-```
 
-##  Build para produção
+⚙️ Configuração de Permissões
+Para que o aplicativo funcione corretamente, as seguintes permissões de localização devem ser concedidas pelo usuário e configuradas nos arquivos nativos:
 
-### Android (APK):
-```bash
-flutter build apk --release
-```
+Android (AndroidManifest.xml):
 
-### Android (Bundle):
-```bash
-flutter build appbundle --release
-```
+ACCESS_FINE_LOCATION
 
-##  Configurações
+ACCESS_COARSE_LOCATION
 
-O aplicativo requer as seguintes permissões Android:
+iOS (Info.plist):
 
-- `ACCESS_FINE_LOCATION` - Localização precisa via GPS
-- `ACCESS_COARSE_LOCATION` - Localização aproximada
-- `WAKE_LOCK` - Manter tela ligada durante o uso
+NSLocationWhenInUseUsageDescription
 
-##  Como Contribuir
+NSLocationAlwaysUsageDescription
 
-Contribuições são sempre bem-vindas! Para contribuir com o projeto:
+NSLocationAlwaysAndWhenInUseUsageDescription
 
-1. **Fork o repositório**
-2. **Crie uma branch para sua feature:**
-   ```bash
-   git checkout -b feature/nova-funcionalidade
-   ```
-3. **Commit suas alterações:**
-   ```bash
-   git commit -m 'Adiciona nova funcionalidade'
-   ```
-4. **Push para a branch:**
-   ```bash
-   git push origin feature/nova-funcionalidade
-   ```
-5. **Abra um Pull Request**
+🤝 Como Contribuir
+Contribuições são muito bem-vindas! Se você tem alguma ideia para melhorar o projeto, siga os passos:
 
-###  Diretrizes para contribuição:
+Faça um Fork do projeto.
 
-- Mantenha o código limpo e bem documentado
-- Siga as convenções de código do Flutter/Dart
-- Teste suas alterações antes de submeter
-- Atualize a documentação se necessário
-- Descreva claramente as mudanças no PR
+Crie uma nova branch (git checkout -b feature/sua-feature).
 
+Faça o commit de suas alterações (git commit -m 'Adiciona sua-feature').
 
+Faça o push para a branch (git push origin feature/sua-feature).
 
-##  Autores
+Abra um Pull Request.
 
+👤 Autores
 <div align="center">
 
-### William Ucha
-[![GitHub](https://img.shields.io/badge/GitHub-@WilliamUcha-181717?style=flat&logo=github)](https://github.com/WilliamUcha)
-
-### Bruno Andres
-[![GitHub](https://img.shields.io/badge/GitHub-@BrunoAndres-181717?style=flat&logo=github)](https://github.com/andrestads)
-
+Bruno Andres
 </div>
-
-##  Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE.md](LICENSE.md) para mais detalhes.
-
-
