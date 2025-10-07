@@ -3,7 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-
 import '../viewmodels/location_viewmodel.dart';
 
 class MapView extends StatefulWidget {
@@ -16,9 +15,34 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> {
   final MapController _mapController = MapController();
   final TextEditingController _searchController = TextEditingController();
-  String _address = '';
+  LocationViewModel? _locationViewModel;
+
+  void _onLocationChanged() {
+    if (_locationViewModel != null && _locationViewModel!.location != null) {
+      final newLocation = LatLng(
+        _locationViewModel!.location!.latitude,
+        _locationViewModel!.location!.longitude,
+      );
+      _mapController.move(newLocation, _mapController.camera.zoom);
+    }
+  }
+  
+  @override
+  void initState() {
+    super.initState();
+    _locationViewModel = Provider.of<LocationViewModel>(context, listen: false);
+  }
+
+  @override
+  void dispose() {
+    _locationViewModel?.removeListener(_onLocationChanged);
+    _searchController.dispose();
+    _mapController.dispose();
+    super.dispose();
+  }
 
   Future<void> _searchLocation(String query) async {
+    FocusScope.of(context).unfocus();
     try {
       List<Location> locations = await locationFromAddress(query);
       if (locations.isNotEmpty) {
@@ -26,10 +50,14 @@ class _MapViewState extends State<MapView> {
           LatLng(locations.first.latitude, locations.first.longitude),
           16,
         );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Localização não encontrada')),
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Localização não encontrada')),
+        const SnackBar(content: Text('Erro ao buscar a localização')),
       );
     }
   }
@@ -38,17 +66,17 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     return Consumer<LocationViewModel>(
       builder: (context, viewModel, child) {
-        if (viewModel.isLoading) {
+        if (viewModel.isLoading && viewModel.location == null) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final location = viewModel.location;
-
-        if (location == null) {
+        if (viewModel.location == null) {
           return const Center(
             child: Text('Não foi possível obter a localização.'),
           );
         }
+        
+        final currentLocation = LatLng(viewModel.location!.latitude, viewModel.location!.longitude);
 
         return Column(
           children: [
@@ -69,24 +97,33 @@ class _MapViewState extends State<MapView> {
                 onSubmitted: _searchLocation,
               ),
             ),
-            Text(_address),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+              child: Text(viewModel.address,
+                  style: Theme.of(context).textTheme.bodySmall),
+            ),
             Expanded(
               child: FlutterMap(
                 mapController: _mapController,
                 options: MapOptions(
-                  initialCenter: LatLng(location.latitude, location.longitude),
+                  initialCenter: currentLocation,
                   initialZoom: 16,
+                  onMapReady: () {
+                    _locationViewModel?.addListener(_onLocationChanged);
+                  },
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate:
+                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: const ['a', 'b', 'c'],
                     userAgentPackageName: 'br.edu.ifsul.flutter_mapas_osm',
                   ),
                   MarkerLayer(
                     markers: [
                       Marker(
-                        point: LatLng(location.latitude, location.longitude),
+                        point: currentLocation,
                         width: 40,
                         height: 40,
                         child: const Icon(
@@ -104,11 +141,5 @@ class _MapViewState extends State<MapView> {
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 }

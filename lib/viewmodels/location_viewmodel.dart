@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,12 +7,20 @@ class LocationViewModel extends ChangeNotifier {
   Position? _location;
   bool _isLoading = true;
   String _address = '';
+  StreamSubscription<Position>? _positionStreamSubscription;
 
   Position? get location => _location;
   bool get isLoading => _isLoading;
   String get address => _address;
 
+  LocationViewModel() {
+    fetchLocation();
+    _listenToLocationChanges();
+  }
+
   Future<void> fetchLocation() async {
+    _isLoading = true;
+    notifyListeners();
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
@@ -32,13 +41,27 @@ class LocationViewModel extends ChangeNotifier {
 
       _location = await Geolocator.getCurrentPosition();
       await _getAddressFromLatLng();
-      _isLoading = false;
-      notifyListeners();
     } catch (e) {
+
+    } finally {
       _isLoading = false;
       notifyListeners();
-      rethrow;
     }
+  }
+
+  void _listenToLocationChanges() {
+    const LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+    );
+
+    _positionStreamSubscription =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position position) {
+      _location = position;
+      _getAddressFromLatLng();
+      notifyListeners();
+    });
   }
 
   Future<void> _getAddressFromLatLng() async {
@@ -50,13 +73,17 @@ class LocationViewModel extends ChangeNotifier {
         );
         if (placemarks.isNotEmpty) {
           Placemark place = placemarks[0];
-          _address =
-              '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}';
+          _address = '${place.street}, ${place.locality}';
         }
       }
     } catch (e) {
-      _address = 'Não foi possível obter o endereço';
+      _address = 'A obter endereço...';
     }
-    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _positionStreamSubscription?.cancel();
+    super.dispose();
   }
 }

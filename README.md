@@ -2,12 +2,7 @@ Mapa com Localização em Tempo Real (OpenStreetMap)
 Um aplicativo Flutter que exibe a localização atual do usuário em um mapa interativo do OpenStreetMap, com atualização em tempo real e busca de endereços.
 
 📸 Captura de Tela
-(Sugestão: Tire uma nova captura de tela do aplicativo com a barra de busca e o mapa para colocar aqui)
-
-<div align="center">
-<img src="assets/images/screenshot.png" alt="Captura de tela do aplicativo de mapa" width="300"/>
-</div>
-
+![alt text](<Captura de tela 2025-10-06 230625.png>)
 ✨ Funcionalidades
 Mapa Interativo: Visualização da localização em um mapa dinâmico baseado no OpenStreetMap.
 

@@ -6,7 +6,7 @@ import 'services/map_view.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => LocationViewModel()..fetchLocation(),
+      create: (_) => LocationViewModel(), 
       child: const MyApp(),
     ),
   );
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Mapa OSM',
       theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.teal),
       home: Scaffold(
-        appBar: AppBar(title: Text('Localização no Mapa')),
+        appBar: AppBar(title: const Text('Localização no Mapa')),
         body: const MapView(),
       ),
     );
